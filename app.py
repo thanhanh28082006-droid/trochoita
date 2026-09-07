@@ -231,6 +231,15 @@ for i, b_col in enumerate(btn_cols):
         if st.button(btn_label, key=f"btn_{i}", disabled=st.session_state.revealed_words[i]):
             show_question_modal(i)
 
+# --- KHU VỰC DÀNH CHO NGƯỜI CHƠI ĐOÁN TRƯỚC THÔNG ĐIỆP ---
+st.markdown("<br><br>", unsafe_allow_html=True)
+col_empty1, col_guess, col_empty2 = st.columns([1, 2, 1])
+with col_guess:
+    st.markdown("<div style='text-align: center; font-size: 28px; font-weight: 800; color: #0D47A1; margin-bottom: 15px;'>💡 Bạn đã tìm ra thông điệp?</div>", unsafe_allow_html=True)
+    if st.button("🌟 LẬT MỞ TOÀN BỘ THÔNG ĐIỆP NGAY 🌟", key="btn_reveal_all", use_container_width=True):
+        st.session_state.revealed_words = [True] * 9
+        st.rerun()
+
 # --- HIỆU ỨNG CHIẾN THẮNG THEO CONCEPT XANH ---
 if all(st.session_state.revealed_words):
     st.balloons()
