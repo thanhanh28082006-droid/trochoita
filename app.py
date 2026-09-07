@@ -29,14 +29,14 @@ QUESTIONS = [
     },
     {
         "id": 4,
-        "word": "CÁC",
+        "word": "CẢ",
         "question": "You can live in the city ______ move to the countryside.",
         "options": ["A. but", "B. so", "C. or", "D. and"],
         "answer": "C. or"
     },
     {
         "id": 5,
-        "word": "BẠN",
+        "word": "LỚP",
         "question": "The house is close to the city center, ______ it is easy to travel to work.",
         "options": ["A. so", "B. but", "C. or", "D. and"],
         "answer": "A. so"
@@ -274,9 +274,9 @@ def show_victory_modal():
     st.markdown("""
     <div style='text-align: center; padding: 20px 10px;'>
         <h1 style='color: #0D47A1; font-size: 42px; font-weight: 900; margin-bottom: 10px; line-height: 1.4; text-shadow: 2px 2px 5px rgba(0,0,0,0.1);'>
-            CHÚC THẦY VÀ CÁC BẠN<br>MỘT NGÀY TỐT LÀNH
+            CHÚC THẦY VÀ CẢ LỚP<br>MỘT NGÀY TỐT LÀNH
         </h1>
-        <p style='color: #1565C0; font-size: 26px; font-style: italic; font-weight: 600; margin-top: 15px;'>
+        <p style='color: #1E88E5; font-size: 34px; font-weight: 900; margin-top: 20px; text-shadow: 0 0 15px rgba(66, 165, 245, 0.8), 0 0 30px rgba(30, 136, 229, 0.6); letter-spacing: 1px;'>
             luôn hạnh phúc và ngập tràn niềm vui 💙
         </p>
     </div>
