@@ -89,9 +89,12 @@ def show_question_modal(idx):
     
     st.markdown(f"<div class='question-text'>{q_data['question']}</div>", unsafe_allow_html=True)
     
-    # Hiện thông báo sai ngay trong tab nhưng không tắt tab
+    # Tạo một không gian trống (placeholder) để nhét thông báo lỗi vào
+    error_msg_placeholder = st.empty()
+    
+    # Nếu trạng thái đang là sai, hiện thông báo lỗi lên
     if st.session_state[status_key] == "wrong":
-        st.markdown("<div class='error-message'>❌ Sai rồi! Bạn hãy đọc kỹ và chọn lại đáp án nhé.</div>", unsafe_allow_html=True)
+        error_msg_placeholder.markdown("<div class='error-message'>❌ Sai rồi! Bạn hãy đọc kỹ và chọn lại đáp án nhé.</div>", unsafe_allow_html=True)
             
     ans_cols = st.columns(2)
     for i, option in enumerate(q_data['options']):
@@ -104,8 +107,8 @@ def show_question_modal(idx):
                     st.rerun() 
                 else:
                     st.session_state[status_key] = "wrong"
-                    # Cập nhật lại tab để hiện lỗi (Giữ nguyên tab)
-                    st.rerun() 
+                    # Bắn thông báo lỗi vào không gian trống mà KHÔNG DÙNG lệnh tắt tab
+                    error_msg_placeholder.markdown("<div class='error-message'>❌ Sai rồi! Bạn hãy đọc kỹ và chọn lại đáp án nhé.</div>", unsafe_allow_html=True)
 
 # --- CSS TÙY CHỈNH (SANG TRỌNG, BÓNG BẨY) ---
 st.markdown("""
