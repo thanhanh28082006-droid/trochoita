@@ -76,6 +76,8 @@ if 'revealed_words' not in st.session_state:
     st.session_state.revealed_words = [False] * 9 # Có 9 chữ cái
 if 'game_won' not in st.session_state:
     st.session_state.game_won = False
+if 'victory_shown' not in st.session_state:
+    st.session_state.victory_shown = False
 
 # --- HÀM XỬ LÝ DIALOG CÂU HỎI ---
 @st.dialog("🎯 THỬ THÁCH TIẾNG ANH", width="large")
@@ -238,11 +240,14 @@ with col_guess:
     st.markdown("<div style='text-align: center; font-size: 28px; font-weight: 800; color: #0D47A1; margin-bottom: 15px;'>💡 Bạn đã tìm ra thông điệp?</div>", unsafe_allow_html=True)
     if st.button("🌟 LẬT MỞ TOÀN BỘ THÔNG ĐIỆP NGAY 🌟", key="btn_reveal_all", use_container_width=True):
         st.session_state.revealed_words = [True] * 9
+        st.session_state.victory_shown = False # Reset lại để popup xuất hiện
         st.rerun()
 
-# --- HIỆU ỨNG CHIẾN THẮNG THEO CONCEPT XANH ---
-if all(st.session_state.revealed_words):
+# --- POP-UP CHIẾN THẮNG ---
+@st.dialog("🎉 THÔNG ĐIỆP BÍ MẬT ĐÃ ĐƯỢC GIẢI MÃ 🎉", width="large")
+def show_victory_modal():
     st.balloons()
+    # Script sinh ra hiệu ứng mưa kim cương, sao chổi rơi
     st.markdown("""
     <style>
     @keyframes fall {
@@ -252,7 +257,7 @@ if all(st.session_state.revealed_words):
     .flower { position: fixed; font-size: 30px; z-index: 9999; top: -10vh; animation: fall linear forwards; }
     </style>
     <script>
-    const flowers = ['💎', '🌟', '✨', '🎓', '💙', '📚']; // Icons học tập & sang trọng
+    const flowers = ['💎', '🌟', '✨', '🎓', '💙', '📚']; 
     for(let i=0; i<60; i++) {
         let f = document.createElement('div');
         f.className = 'flower';
@@ -260,8 +265,33 @@ if all(st.session_state.revealed_words):
         f.style.left = Math.random() * 100 + 'vw';
         f.style.animationDuration = (Math.random() * 3 + 2) + 's';
         f.style.animationDelay = Math.random() * 2 + 's';
-        document.body.appendChild(f);
+        window.parent.document.body.appendChild(f);
     }
     </script>
     """, unsafe_allow_html=True)
-    st.success("🎉 XUẤT SẮC! BẠN ĐÃ GIẢI MÃ THÀNH CÔNG TOÀN BỘ THÔNG ĐIỆP!")
+    
+    # Giao diện thông điệp chính trong Pop-up
+    st.markdown("""
+    <div style='text-align: center; padding: 20px 10px;'>
+        <h1 style='color: #0D47A1; font-size: 42px; font-weight: 900; margin-bottom: 10px; line-height: 1.4; text-shadow: 2px 2px 5px rgba(0,0,0,0.1);'>
+            CHÚC THẦY VÀ CÁC BẠN<br>MỘT NGÀY TỐT LÀNH
+        </h1>
+        <p style='color: #1565C0; font-size: 26px; font-style: italic; font-weight: 600; margin-top: 15px;'>
+            luôn hạnh phúc và ngập tràn niềm vui 💙
+        </p>
+    </div>
+    <br>
+    """, unsafe_allow_html=True)
+    
+    # Nút đóng Popup chiến thắng
+    if st.button("🌟 Tuyệt vời!", use_container_width=True):
+        st.session_state.victory_shown = True
+        st.rerun()
+
+# --- HIỆU ỨNG CHIẾN THẮNG TRÊN MÀN HÌNH CHÍNH ---
+if all(st.session_state.revealed_words):
+    if not st.session_state.victory_shown:
+        show_victory_modal() # Kích hoạt mở Popup lên ngay lập tức
+    else:
+        # Nếu đã tắt popup, màn hình chính sẽ hiện thông báo xanh dương nhỏ bên dưới
+        st.success("🎉 XUẤT SẮC! BẠN ĐÃ GIẢI MÃ THÀNH CÔNG TOÀN BỘ THÔNG ĐIỆP!")
