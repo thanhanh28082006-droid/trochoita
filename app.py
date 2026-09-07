@@ -83,53 +83,127 @@ def show_question_modal(idx):
     q_data = QUESTIONS[idx]
     
     # State quản lý trạng thái trong modal
-    if f"q_status_{idx}" not in st.session_state:
-        st.session_state[f"q_status_{idx}"] = "playing"
+    status_key = f"q_status_{idx}"
+    if status_key not in st.session_state:
+        st.session_state[status_key] = "playing"
     
     st.markdown(f"<div class='question-text'>{q_data['question']}</div>", unsafe_allow_html=True)
     
-    if st.session_state[f"q_status_{idx}"] == "correct":
-        st.success("🎉 TUYỆT VỜI! BẠN ĐÃ TRẢ LỜI ĐÚNG. Chữ cái đã được mở!")
-        time.sleep(2)
-        st.rerun()
-    else:
-        if st.session_state[f"q_status_{idx}"] == "wrong":
-            st.error("❌ Bạn trả lời sai rồi! Bạn chọn lại đi.")
+    # Hiện thông báo sai ngay trong tab nhưng không tắt tab
+    if st.session_state[status_key] == "wrong":
+        st.markdown("<div class='error-message'>❌ Sai rồi! Bạn hãy đọc kỹ và chọn lại đáp án nhé.</div>", unsafe_allow_html=True)
             
-        ans_cols = st.columns(2)
-        for i, option in enumerate(q_data['options']):
-            with ans_cols[i % 2]:
-                if st.button(option, key=f"opt_{idx}_{i}", use_container_width=True):
-                    if option == q_data['answer']:
-                        st.session_state[f"q_status_{idx}"] = "correct"
-                        st.session_state.revealed_words[idx] = True
-                        st.rerun()
-                    else:
-                        st.session_state[f"q_status_{idx}"] = "wrong"
-                        st.rerun()
+    ans_cols = st.columns(2)
+    for i, option in enumerate(q_data['options']):
+        with ans_cols[i % 2]:
+            if st.button(option, key=f"opt_{idx}_{i}", use_container_width=True):
+                if option == q_data['answer']:
+                    st.session_state[status_key] = "correct"
+                    st.session_state.revealed_words[idx] = True
+                    # Tắt tab ngay lập tức và lật chữ bên ngoài màn hình chính
+                    st.rerun() 
+                else:
+                    st.session_state[status_key] = "wrong"
+                    # Cập nhật lại tab để hiện lỗi (Giữ nguyên tab)
+                    st.rerun() 
 
-# --- CSS TÙY CHỈNH (NỀN XANH NƯỚC BIỂN SANG TRỌNG) ---
+# --- CSS TÙY CHỈNH (SANG TRỌNG, BÓNG BẨY) ---
 st.markdown("""
 <style>
-    /* Màu nền tổng thể - Xanh nước biển siêu nhạt */
-    .stApp { background-color: #E3F2FD; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    /* Màu nền tổng thể - Gradient pha trộn cực sang trọng */
+    .stApp { background: linear-gradient(135deg, #e3f2fd, #e8eaf6, #bbdefb); font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; }
     
-    /* Container viền trắng nổi bật */
-    .white-container { background-color: #FFFFFF; border-radius: 20px; padding: 25px; box-shadow: 0 8px 20px rgba(25, 118, 210, 0.15); margin-bottom: 20px; position: relative; }
+    /* Container viền trắng hiệu ứng kính (Glassmorphism) */
+    .white-container { 
+        background-color: rgba(255, 255, 255, 0.75); 
+        backdrop-filter: blur(15px); 
+        border-radius: 25px; 
+        padding: 35px; 
+        box-shadow: 0 20px 40px rgba(21, 101, 192, 0.15); 
+        border: 1px solid rgba(255,255,255,0.9); 
+        margin-bottom: 25px; 
+    }
     
-    /* Font chữ câu hỏi */
-    .question-text { font-size: 24px; color: #1a1a1a; text-align: center; margin-bottom: 30px; font-weight: 600; line-height: 1.5; }
+    /* Font chữ câu hỏi to, sắc nét, màu biển sâu */
+    .question-text { 
+        font-size: 34px; 
+        color: #0D47A1; 
+        text-align: center; 
+        margin-bottom: 30px; 
+        font-weight: 800; 
+        line-height: 1.5; 
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.1); 
+    }
     
-    /* Ô chữ - Đổ dải màu xanh biển sáng */
-    .word-box { display: flex; justify-content: center; align-items: center; height: 80px; background: linear-gradient(135deg, #1E88E5, #1565C0); color: white; border-radius: 15px; font-size: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(21, 101, 192, 0.3); }
-    .word-hidden { background: #E0E0E0; color: #9E9E9E; box-shadow: none;}
+    /* Banner báo lỗi siêu đẹp ngay trong tab */
+    .error-message { 
+        background: linear-gradient(90deg, #ffeb3b, #ffc107); 
+        color: #b71c1c; 
+        padding: 15px; 
+        border-radius: 15px; 
+        text-align: center; 
+        font-size: 24px; 
+        font-weight: bold; 
+        margin-bottom: 25px; 
+        border-left: 8px solid #d32f2f; 
+        box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+    }
     
-    /* Nút bấm làm mềm mại */
-    div.stButton > button { border-radius: 15px; font-weight: bold; height: 60px; font-size: 16px !important; border: 1px solid #BBDEFB; transition: 0.3s; }
-    div.stButton > button:hover { border-color: #1E88E5; color: #1565C0; background-color: #F3E5F5; }
+    /* Ô chữ - Hiệu ứng Glossy 3D siêu bóng bẩy, chữ khổng lồ */
+    .word-box { 
+        display: flex; justify-content: center; align-items: center; 
+        height: 110px; 
+        background: linear-gradient(145deg, #42a5f5, #1565C0); 
+        color: white; 
+        border-radius: 20px; 
+        font-size: 42px; 
+        font-weight: 900; 
+        box-shadow: inset 0px 6px 12px rgba(255,255,255,0.6), 0px 12px 25px rgba(21, 101, 192, 0.5); 
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.5); 
+        border: 2px solid #90caf9; 
+        margin: 5px; 
+    }
+    .word-hidden { 
+        background: linear-gradient(145deg, #ffffff, #eeeeee); 
+        color: #bdbdbd; 
+        box-shadow: inset 0px 5px 10px rgba(255,255,255,1), 0px 8px 15px rgba(0,0,0,0.1); 
+        border: 2px solid #e0e0e0; 
+        text-shadow: none;
+    }
+    
+    /* Nút bấm làm to ra, hiệu ứng đổ bóng mượt mà */
+    div.stButton > button { 
+        border-radius: 20px; 
+        font-weight: 800; 
+        height: 85px; 
+        font-size: 24px !important; 
+        border: 2px solid #90caf9; 
+        background: linear-gradient(to bottom, #ffffff, #e3f2fd); 
+        color: #0D47A1; 
+        box-shadow: 0 6px 15px rgba(21, 101, 192, 0.15); 
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+        white-space: normal; 
+    }
+    div.stButton > button:hover { 
+        border-color: #1565C0; 
+        color: white; 
+        background: linear-gradient(145deg, #1E88E5, #0D47A1); 
+        box-shadow: 0 10px 25px rgba(13, 71, 161, 0.5); 
+        transform: translateY(-5px); 
+    }
     
     /* Tiêu đề chính */
-    .main-title { text-align: center; color: #1565C0; font-size: 40px; font-weight: 900; margin-bottom: 30px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(21, 101, 192, 0.2); }
+    .main-title { 
+        text-align: center; 
+        font-size: 50px; 
+        font-weight: 900; 
+        margin-bottom: 40px; 
+        text-transform: uppercase; 
+        background: linear-gradient(to right, #1565C0, #D81B60, #1565C0); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        text-shadow: 3px 3px 8px rgba(0,0,0,0.15); 
+    }
 </style>
 """, unsafe_allow_html=True)
 
