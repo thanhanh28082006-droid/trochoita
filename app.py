@@ -4,7 +4,6 @@ import time
 # --- CẤU HÌNH TRANG ---
 st.set_page_config(page_title="Giải mã Thông điệp", page_icon="💎", layout="wide")
 
-# --- DỮ LIỆU CÂU HỎI (9 Câu Tiếng Anh) ---
 QUESTIONS = [
     {
         "id": 1,
@@ -79,22 +78,18 @@ if 'game_won' not in st.session_state:
 if 'victory_shown' not in st.session_state:
     st.session_state.victory_shown = False
 
-# --- HÀM XỬ LÝ DIALOG CÂU HỎI ---
 @st.dialog("🎯 THỬ THÁCH TIẾNG ANH", width="large")
 def show_question_modal(idx):
     q_data = QUESTIONS[idx]
     
-    # State quản lý trạng thái trong modal
     status_key = f"q_status_{idx}"
     if status_key not in st.session_state:
         st.session_state[status_key] = "playing"
     
     st.markdown(f"<div class='question-text'>{q_data['question']}</div>", unsafe_allow_html=True)
     
-    # Tạo một không gian trống (placeholder) để nhét thông báo lỗi vào
     error_msg_placeholder = st.empty()
     
-    # Nếu trạng thái đang là sai, hiện thông báo lỗi lên
     if st.session_state[status_key] == "wrong":
         error_msg_placeholder.markdown("<div class='error-message'>❌ Sai rồi! Bạn hãy đọc kỹ và chọn lại đáp án nhé.</div>", unsafe_allow_html=True)
             
@@ -112,13 +107,10 @@ def show_question_modal(idx):
                     # Bắn thông báo lỗi vào không gian trống mà KHÔNG DÙNG lệnh tắt tab
                     error_msg_placeholder.markdown("<div class='error-message'>❌ Sai rồi! Bạn hãy đọc kỹ và chọn lại đáp án nhé.</div>", unsafe_allow_html=True)
 
-# --- CSS TÙY CHỈNH (SANG TRỌNG, BÓNG BẨY) ---
 st.markdown("""
 <style>
-    /* Màu nền tổng thể - Gradient pha trộn cực sang trọng */
     .stApp { background: linear-gradient(135deg, #e3f2fd, #e8eaf6, #bbdefb); font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; }
     
-    /* Container viền trắng hiệu ứng kính (Glassmorphism) */
     .white-container { 
         background-color: rgba(255, 255, 255, 0.75); 
         backdrop-filter: blur(15px); 
@@ -129,7 +121,6 @@ st.markdown("""
         margin-bottom: 25px; 
     }
     
-    /* Font chữ câu hỏi to, sắc nét, màu biển sâu */
     .question-text { 
         font-size: 34px; 
         color: #0D47A1; 
@@ -140,7 +131,6 @@ st.markdown("""
         text-shadow: 1px 1px 3px rgba(0,0,0,0.1); 
     }
     
-    /* Banner báo lỗi siêu đẹp ngay trong tab */
     .error-message { 
         background: linear-gradient(90deg, #ffeb3b, #ffc107); 
         color: #b71c1c; 
@@ -154,7 +144,6 @@ st.markdown("""
         box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
     }
     
-    /* Ô chữ - Hiệu ứng Glossy 3D siêu bóng bẩy, chữ khổng lồ */
     .word-box { 
         display: flex; justify-content: center; align-items: center; 
         height: 110px; 
@@ -176,7 +165,6 @@ st.markdown("""
         text-shadow: none;
     }
     
-    /* Nút bấm làm to ra, hiệu ứng đổ bóng mượt mà */
     div.stButton > button { 
         border-radius: 20px; 
         font-weight: 800; 
@@ -233,7 +221,6 @@ for i, b_col in enumerate(btn_cols):
         if st.button(btn_label, key=f"btn_{i}", disabled=st.session_state.revealed_words[i]):
             show_question_modal(i)
 
-# --- KHU VỰC DÀNH CHO NGƯỜI CHƠI ĐOÁN TRƯỚC THÔNG ĐIỆP ---
 st.markdown("<br><br>", unsafe_allow_html=True)
 col_empty1, col_guess, col_empty2 = st.columns([1, 2, 1])
 with col_guess:
@@ -243,7 +230,6 @@ with col_guess:
         st.session_state.victory_shown = False # Reset lại để popup xuất hiện
         st.rerun()
 
-# --- POP-UP CHIẾN THẮNG ---
 @st.dialog("🎉 THÔNG ĐIỆP BÍ MẬT ĐÃ ĐƯỢC GIẢI MÃ 🎉", width="large")
 def show_victory_modal():
     st.balloons()
@@ -283,15 +269,12 @@ def show_victory_modal():
     <br>
     """, unsafe_allow_html=True)
     
-    # Nút đóng Popup chiến thắng
     if st.button("🌟 Tuyệt vời!", use_container_width=True):
         st.session_state.victory_shown = True
         st.rerun()
 
-# --- HIỆU ỨNG CHIẾN THẮNG TRÊN MÀN HÌNH CHÍNH ---
 if all(st.session_state.revealed_words):
     if not st.session_state.victory_shown:
         show_victory_modal() # Kích hoạt mở Popup lên ngay lập tức
     else:
-        # Nếu đã tắt popup, màn hình chính sẽ hiện thông báo xanh dương nhỏ bên dưới
         st.success("🎉 XUẤT SẮC! BẠN ĐÃ GIẢI MÃ THÀNH CÔNG TOÀN BỘ THÔNG ĐIỆP!")
