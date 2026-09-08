@@ -91,7 +91,7 @@ def show_question_modal(idx):
     error_msg_placeholder = st.empty()
     
     if st.session_state[status_key] == "wrong":
-        error_msg_placeholder.markdown("<div class='error-message'>❌ Sai rồi! Bạn hãy đọc kỹ và chọn lại đáp án nhé.</div>", unsafe_allow_html=True)
+        error_msg_placeholder.markdown("<div class='error-message'>❌ SAI RỒI! BẠN HÃY ĐỌC KỸ VÀ CHỌN LẠI ĐÁP ÁN NHÉ.</div>", unsafe_allow_html=True)
             
     ans_cols = st.columns(2)
     for i, option in enumerate(q_data['options']):
@@ -105,7 +105,7 @@ def show_question_modal(idx):
                 else:
                     st.session_state[status_key] = "wrong"
                     # Bắn thông báo lỗi vào không gian trống mà KHÔNG DÙNG lệnh tắt tab
-                    error_msg_placeholder.markdown("<div class='error-message'>❌ Sai rồi! Bạn hãy đọc kỹ và chọn lại đáp án nhé.</div>", unsafe_allow_html=True)
+                    error_msg_placeholder.markdown("<div class='error-message'>❌ SAI RỒI! BẠN HÃY ĐỌC KỸ VÀ CHỌN LẠI ĐÁP ÁN NHÉ.</div>", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
@@ -122,11 +122,11 @@ st.markdown("""
     }
     
     .question-text { 
-        font-size: 34px; 
+        font-size: 42px; /* Phóng to siêu bự */
         color: #0D47A1; 
         text-align: center; 
         margin-bottom: 30px; 
-        font-weight: 800; 
+        font-weight: 900; /* In đậm tối đa */
         line-height: 1.5; 
         text-shadow: 1px 1px 3px rgba(0,0,0,0.1); 
     }
@@ -134,11 +134,11 @@ st.markdown("""
     .error-message { 
         background: linear-gradient(90deg, #ffeb3b, #ffc107); 
         color: #b71c1c; 
-        padding: 15px; 
+        padding: 20px; 
         border-radius: 15px; 
         text-align: center; 
-        font-size: 24px; 
-        font-weight: bold; 
+        font-size: 28px; /* Chữ lỗi siêu to */
+        font-weight: 900; 
         margin-bottom: 25px; 
         border-left: 8px solid #d32f2f; 
         box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
@@ -146,36 +146,39 @@ st.markdown("""
     
     .word-box { 
         display: flex; justify-content: center; align-items: center; 
-        height: 110px; 
+        height: 120px; /* Hộp chữ to hơn */
         background: linear-gradient(145deg, #42a5f5, #1565C0); 
         color: white; 
         border-radius: 20px; 
-        font-size: 42px; 
+        font-size: 45px; /* Chữ cái to rõ ràng */
         font-weight: 900; 
         box-shadow: inset 0px 6px 12px rgba(255,255,255,0.6), 0px 12px 25px rgba(21, 101, 192, 0.5); 
         text-shadow: 2px 2px 6px rgba(0,0,0,0.5); 
-        border: 2px solid #90caf9; 
+        border: 3px solid #90caf9; 
         margin: 5px; 
     }
     .word-hidden { 
         background: linear-gradient(145deg, #ffffff, #eeeeee); 
         color: #bdbdbd; 
         box-shadow: inset 0px 5px 10px rgba(255,255,255,1), 0px 8px 15px rgba(0,0,0,0.1); 
-        border: 2px solid #e0e0e0; 
+        border: 3px solid #e0e0e0; 
         text-shadow: none;
     }
     
     div.stButton > button { 
         border-radius: 20px; 
-        font-weight: 800; 
-        height: 85px; 
-        font-size: 24px !important; 
-        border: 2px solid #90caf9; 
+        font-weight: 900 !important; /* In đậm đáp án */
+        min-height: 100px; /* Tự co giãn chiều cao nếu chữ dài */
+        height: auto;
+        padding: 15px;
+        font-size: 28px !important; /* Đáp án siêu to */
+        border: 3px solid #90caf9; 
         background: linear-gradient(to bottom, #ffffff, #e3f2fd); 
         color: #0D47A1; 
         box-shadow: 0 6px 15px rgba(21, 101, 192, 0.15); 
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
         white-space: normal; 
+        line-height: 1.4;
     }
     div.stButton > button:hover { 
         border-color: #1565C0; 
@@ -188,7 +191,7 @@ st.markdown("""
     /* Tiêu đề chính */
     .main-title { 
         text-align: center; 
-        font-size: 50px; 
+        font-size: 60px; /* Tiêu đề to hơn */
         font-weight: 900; 
         margin-bottom: 40px; 
         text-transform: uppercase; 
@@ -213,7 +216,7 @@ for i, col in enumerate(cols):
             st.markdown(f'<div class="word-box word-hidden">?</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-st.subheader("🎯 Chọn câu hỏi để giải mã")
+st.markdown("<div style='font-size: 40px; font-weight: 900; color: #0D47A1; margin-bottom: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.1);'>🎯 CHỌN CÂU HỎI ĐỂ GIẢI MÃ:</div>", unsafe_allow_html=True)
 btn_cols = st.columns(9) # 9 nút bấm
 for i, b_col in enumerate(btn_cols):
     with b_col:
@@ -224,7 +227,7 @@ for i, b_col in enumerate(btn_cols):
 st.markdown("<br><br>", unsafe_allow_html=True)
 col_empty1, col_guess, col_empty2 = st.columns([1, 2, 1])
 with col_guess:
-    st.markdown("<div style='text-align: center; font-size: 28px; font-weight: 800; color: #0D47A1; margin-bottom: 15px;'>💡 Bạn đã tìm ra thông điệp?</div>", unsafe_allow_html=True)
+    st.markdown("<div style='text-align: center; font-size: 36px; font-weight: 900; color: #0D47A1; margin-bottom: 20px;'>💡 BẠN ĐÃ TÌM RA THÔNG ĐIỆP?</div>", unsafe_allow_html=True)
     if st.button("🌟 LẬT MỞ TOÀN BỘ THÔNG ĐIỆP NGAY 🌟", key="btn_reveal_all", use_container_width=True):
         st.session_state.revealed_words = [True] * 9
         st.session_state.victory_shown = False # Reset lại để popup xuất hiện
@@ -240,7 +243,7 @@ def show_victory_modal():
         0% { transform: translateY(-10vh) rotate(0deg); opacity: 1;}
         100% { transform: translateY(100vh) rotate(360deg); opacity: 0;}
     }
-    .flower { position: fixed; font-size: 30px; z-index: 9999; top: -10vh; animation: fall linear forwards; }
+    .flower { position: fixed; font-size: 40px; z-index: 9999; top: -10vh; animation: fall linear forwards; }
     </style>
     <script>
     const flowers = ['💎', '🌟', '✨', '🎓', '💙', '📚']; 
@@ -258,18 +261,18 @@ def show_victory_modal():
     
     # Giao diện thông điệp chính trong Pop-up
     st.markdown("""
-    <div style='text-align: center; padding: 20px 10px;'>
-        <h1 style='color: #0D47A1; font-size: 42px; font-weight: 900; margin-bottom: 10px; line-height: 1.4; text-shadow: 2px 2px 5px rgba(0,0,0,0.1);'>
+    <div style='text-align: center; padding: 30px 10px;'>
+        <h1 style='color: #0D47A1; font-size: 55px; font-weight: 900; margin-bottom: 10px; line-height: 1.4; text-shadow: 2px 2px 5px rgba(0,0,0,0.1);'>
             CHÚC THẦY VÀ CẢ LỚP<br>MỘT NGÀY TỐT LÀNH
         </h1>
-        <p style='color: #1E88E5; font-size: 34px; font-weight: 900; margin-top: 20px; text-shadow: 0 0 15px rgba(66, 165, 245, 0.8), 0 0 30px rgba(30, 136, 229, 0.6); letter-spacing: 1px;'>
+        <p style='color: #1E88E5; font-size: 42px; font-weight: 900; margin-top: 30px; text-shadow: 0 0 15px rgba(66, 165, 245, 0.8), 0 0 30px rgba(30, 136, 229, 0.6); letter-spacing: 1px;'>
             luôn hạnh phúc và ngập tràn niềm vui 💙
         </p>
     </div>
     <br>
     """, unsafe_allow_html=True)
     
-    if st.button("🌟 Tuyệt vời!", use_container_width=True):
+    if st.button("🌟 TUYỆT VỜI!", use_container_width=True):
         st.session_state.victory_shown = True
         st.rerun()
 
