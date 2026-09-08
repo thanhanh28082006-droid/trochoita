@@ -167,11 +167,11 @@ st.markdown("""
     
     div.stButton > button { 
         border-radius: 20px; 
-        font-weight: 900 !important; /* In đậm đáp án */
-        min-height: 100px; /* Tự co giãn chiều cao nếu chữ dài */
+        font-weight: 900 !important; 
+        min-height: 100px; 
         height: auto;
         padding: 15px;
-        font-size: 28px !important; /* Đáp án siêu to */
+        font-size: 32px !important; /* Ép cỡ chữ to ở viền ngoài */
         border: 3px solid #90caf9; 
         background: linear-gradient(to bottom, #ffffff, #e3f2fd); 
         color: #0D47A1; 
@@ -180,6 +180,14 @@ st.markdown("""
         white-space: normal; 
         line-height: 1.4;
     }
+    
+    /* FIX CHỮ ĐÁP ÁN NHỎ: Ép chữ bên trong lõi nút bấm to lên */
+    div.stButton > button p {
+        font-size: 32px !important; /* Đáp án siêu to khổng lồ */
+        font-weight: 900 !important; /* In đậm tối đa */
+        margin: 0 !important;
+    }
+
     div.stButton > button:hover { 
         border-color: #1565C0; 
         color: white; 
